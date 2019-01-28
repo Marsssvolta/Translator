@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Translator</string>
+    <string name="tab_translation">Перевод</string>
+    <string name="tab_history">История</string>
+
+    <string name="action_delete">Удаление</string>
+</resources>
