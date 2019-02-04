@@ -4,4 +4,5 @@
     <string name="tab_history">История</string>
 
     <string name="action_delete">Удаление</string>
+    <string name="hint_text">Введите слово или текст</string>
 </resources>
