@@ -38,5 +38,13 @@ public class TranslatorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
+        //Очистка текста
+        mClearText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTextInput.setText("");
+                mTextTranslated.setText("");
+            }
+        });
     }
 }
