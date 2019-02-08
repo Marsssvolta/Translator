@@ -24,7 +24,7 @@
                 android:spinnerMode="dropdown" />
 
             <ImageView
-                android:id="@+id/image_swap"
+                android:id="@+id/swap_translate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"

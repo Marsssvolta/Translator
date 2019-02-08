@@ -20,7 +20,7 @@ public class TranslatorFragment extends Fragment {
 
     private Spinner mSpinnerLanguageFrom;
     private Spinner mSpinnerLanguageTo;
-    private ImageView mImageSwap;
+    private ImageView mSwapTranslate;
     private ImageView mClearText;
     private EditText mTextInput;
     private TextView mTextTranslated;
@@ -33,7 +33,7 @@ public class TranslatorFragment extends Fragment {
 
         mSpinnerLanguageFrom = view.findViewById(R.id.spinner_language_from);
         mSpinnerLanguageTo = view.findViewById(R.id.spinner_language_to);
-        mImageSwap = view.findViewById(R.id.image_swap);
+        mSwapTranslate = view.findViewById(R.id.swap_translate);
         mClearText = view.findViewById(R.id.clear_text);
         mTextInput = view.findViewById(R.id.text_input);
         mTextTranslated = view.findViewById(R.id.text_translated);
@@ -44,15 +44,8 @@ public class TranslatorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         setSpinners();
-
-        //Очистка текста
-        mClearText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTextInput.setText("");
-                mTextTranslated.setText("");
-            }
-        });
+        swapButtonListener();
+        clearButtonListener();
     }
 
     //Установка спиннеров
@@ -71,5 +64,24 @@ public class TranslatorFragment extends Fragment {
         mSpinnerLanguageFrom.setSelection(3);
         mSpinnerLanguageTo.setAdapter(arrayAdapter);
         mSpinnerLanguageTo.setSelection(60);
+    }
+
+    //Изменение направления перевода
+    public void swapButtonListener() {
+        mSwapTranslate.setOnClickListener(v -> {
+            int sourceLng = mSpinnerLanguageFrom.getSelectedItemPosition();
+            int targetLng = mSpinnerLanguageTo.getSelectedItemPosition();
+
+            mSpinnerLanguageFrom.setSelection(targetLng);
+            mSpinnerLanguageTo.setSelection(sourceLng);
+        });
+    }
+
+    //Очистка текста
+    public void clearButtonListener() {
+        mClearText.setOnClickListener(v -> {
+            mTextInput.setText("");
+            mTextTranslated.setText("");
+        });
     }
 }
