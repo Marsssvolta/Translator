@@ -1,7 +1,10 @@
 package com.marsssvolta.translator;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +38,14 @@ public class TranslatorFragment extends Fragment {
     private EditText mTextInput;
     private TextView mTextTranslated;
     private String[] mCountries;
-    private String mResponse;
+    private WordsViewModel mWordsViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mWordsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()))
+                .get(WordsViewModel.class);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -99,18 +109,22 @@ public class TranslatorFragment extends Fragment {
 
     //Перевод текста
     public void translate(String text) {
-        ApiFactory apiFactory = new ApiFactory();
         String language1 = String.valueOf(mSpinnerLanguageFrom.getSelectedItem());
         String language2 = String.valueOf(mSpinnerLanguageTo.getSelectedItem());
-        mResponse = apiFactory.translate(text, langCode(language1), langCode(language2));
-        Log.i(TAG, mResponse + "222");
-        //mResponse = apiFactory.mTranslated;
-        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mTextTranslated.setText(mResponse);
-            }
-        });
+
+        mWordsViewModel.translate(text, langCode(language1), langCode(language2)).observe(
+                this, new Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable final String text) {
+                        Log.i(TAG, "onChanged: " + text);
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mTextTranslated.setText(text);
+                            }
+                        });
+                    }
+                });
     }
 
     //Получение кода языка
