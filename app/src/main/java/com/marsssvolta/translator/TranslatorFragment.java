@@ -121,6 +121,7 @@ public class TranslatorFragment extends Fragment {
                             @Override
                             public void run() {
                                 mTextTranslated.setText(text);
+                                addToHistory();
                             }
                         });
                     }
@@ -157,5 +158,15 @@ public class TranslatorFragment extends Fragment {
                         TranslatorFragment.this.translate(charSequence.toString().trim());
                     }
                 });
+    }
+
+    // Добавление в список
+    public void addToHistory() {
+        String text = String.valueOf(mTextInput.getText()).trim();
+        if (!text.equals("")) {
+            HistoryWords historyWords = new HistoryWords(mTextInput.getText().toString().trim(),
+                    mTextTranslated.getText().toString());
+            mWordsViewModel.insert(historyWords);
+        }
     }
 }

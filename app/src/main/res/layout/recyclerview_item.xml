@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/list_item_word_source"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/item_padding"
+        android:textSize="@dimen/size_text"
+        android:textStyle="bold"
+        tools:text="Source" />
+
+    <TextView
+        android:id="@+id/list_item_word_translated"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/item_padding"
+        android:textSize="@dimen/size_text"
+        android:textStyle="bold"
+        tools:text="Translated" />
+
+</LinearLayout>

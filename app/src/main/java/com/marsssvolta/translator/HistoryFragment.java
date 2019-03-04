@@ -1,7 +1,10 @@
 package com.marsssvolta.translator;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +15,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 public class HistoryFragment extends Fragment {
+
+    private WordsViewModel mWordsViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        HistoryListAdapter historyListAdapter = new HistoryListAdapter(getContext());
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(historyListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mWordsViewModel = ViewModelProviders.of(this).get(WordsViewModel.class);
+        // Установка списка
+        mWordsViewModel.getAllHistoryWords().observe(this, new Observer<List<HistoryWords>>() {
+            @Override
+            public void onChanged(@Nullable List<HistoryWords> historyWords) {
+                historyListAdapter.setHistoryWords(historyWords);
+            }
+        });
 
         return view;
     }

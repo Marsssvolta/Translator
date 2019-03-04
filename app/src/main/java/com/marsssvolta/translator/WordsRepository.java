@@ -1,9 +1,13 @@
 package com.marsssvolta.translator;
 
+import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -12,7 +16,58 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WordsRepository {
 
+    private HistoryWordsDao mHistoryWordsDao;
+    private LiveData<List<HistoryWords>> mAllHistoryWords;
+
     private static final String TAG = "WordsRepository";
+
+    WordsRepository(Application application) {
+        HistoryWordsRoomDatabase db = HistoryWordsRoomDatabase.getDatabase(application);
+        mHistoryWordsDao = db.historyWordsDao();
+        mAllHistoryWords = mHistoryWordsDao.getHistoryWords();
+    }
+
+    LiveData<List<HistoryWords>> getAllHistoryWords() {
+        return mAllHistoryWords;
+    }
+
+    void insert(HistoryWords historyWords) {
+        new insertAsyncTask(mHistoryWordsDao).execute(historyWords);
+    }
+
+    private static class insertAsyncTask extends AsyncTask<HistoryWords, Void, Void> {
+
+        private HistoryWordsDao mAsyncTaskDao;
+
+        insertAsyncTask(HistoryWordsDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final HistoryWords... params) {
+            mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    void deleteAll(){
+        new DeleteAllAsyncTask(mHistoryWordsDao).execute();
+    }
+
+    private static class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private HistoryWordsDao mAsyncTaskDao;
+
+        DeleteAllAsyncTask(HistoryWordsDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            mAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
 
     public MutableLiveData<String> translate(String text, String langFrom, String langTo) {
 
