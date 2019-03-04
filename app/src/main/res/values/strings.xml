@@ -6,6 +6,11 @@
     <string name="action_delete">Удаление</string>
     <string name="hint_text">Введите слово или текст</string>
 
+    <string name="dialog_delete_all_notes">УДАЛИТЬ ИСТРОРИЮ ПЕРЕВОДОВ?</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="toast_delete_notes">История удалена.</string>
+
     <string-array name="countries">
         <item>Азербайджанский</item>
         <item>Албанский</item>
