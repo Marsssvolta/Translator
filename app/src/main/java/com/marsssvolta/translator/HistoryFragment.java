@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+
+import static android.support.v7.widget.OrientationHelper.VERTICAL;
 
 public class HistoryFragment extends Fragment {
 
@@ -32,6 +35,10 @@ public class HistoryFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(historyListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Подчёркивание пунктов списка
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), VERTICAL);
+        recyclerView.addItemDecoration(itemDecor);
 
         mWordsViewModel = ViewModelProviders.of(this).get(WordsViewModel.class);
         // Установка списка

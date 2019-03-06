@@ -6,22 +6,22 @@
 
     <TextView
         android:id="@+id/list_item_word_source"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="@dimen/zero_width"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="@dimen/item_padding"
+        android:padding="@dimen/small_padding"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/size_text"
-        android:textStyle="bold"
         tools:text="Source" />
 
     <TextView
         android:id="@+id/list_item_word_translated"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="@dimen/zero_width"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="@dimen/item_padding"
+        android:padding="@dimen/small_padding"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/size_text"
-        android:textStyle="bold"
         tools:text="Translated" />
 
 </LinearLayout>
