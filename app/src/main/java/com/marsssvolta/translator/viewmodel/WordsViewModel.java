@@ -1,9 +1,12 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+
+import com.marsssvolta.translator.model.HistoryWords;
+import com.marsssvolta.translator.repository.WordsRepository;
 
 import java.util.List;
 

@@ -1,9 +1,15 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+
+import com.marsssvolta.translator.remote.APIHelper;
+import com.marsssvolta.translator.model.HistoryWords;
+import com.marsssvolta.translator.db.HistoryWordsDao;
+import com.marsssvolta.translator.db.HistoryWordsRoomDatabase;
+import com.marsssvolta.translator.model.TranslatedText;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,19 +25,19 @@ public class WordsRepository {
     private HistoryWordsDao mHistoryWordsDao;
     private LiveData<List<HistoryWords>> mAllHistoryWords;
 
-    WordsRepository(Application application) {
+    public WordsRepository(Application application) {
         HistoryWordsRoomDatabase db = HistoryWordsRoomDatabase.getDatabase(application);
         mHistoryWordsDao = db.historyWordsDao();
         mAllHistoryWords = mHistoryWordsDao.getHistoryWords();
     }
 
     // Установка истории
-    LiveData<List<HistoryWords>> getAllHistoryWords() {
+    public LiveData<List<HistoryWords>> getAllHistoryWords() {
         return mAllHistoryWords;
     }
 
     // Добавление в историю
-    void insert(HistoryWords historyWords) {
+    public void insert(HistoryWords historyWords) {
         new insertAsyncTask(mHistoryWordsDao).execute(historyWords);
     }
 
@@ -51,7 +57,7 @@ public class WordsRepository {
     }
 
     // Очистка истории
-    void deleteAll(){
+    public void deleteAll(){
         new DeleteAllAsyncTask(mHistoryWordsDao).execute();
     }
 

@@ -1,4 +1,4 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.marsssvolta.translator.R;
+import com.marsssvolta.translator.viewmodel.WordsViewModel;
 
 import java.util.Objects;
 

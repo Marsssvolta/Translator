@@ -1,4 +1,6 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.remote;
+
+import com.marsssvolta.translator.model.TranslatedText;
 
 import retrofit2.Call;
 import retrofit2.http.POST;

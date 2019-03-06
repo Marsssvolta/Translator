@@ -1,4 +1,4 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

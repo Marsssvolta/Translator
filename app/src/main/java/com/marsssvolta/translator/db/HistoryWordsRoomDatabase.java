@@ -1,9 +1,11 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+
+import com.marsssvolta.translator.model.HistoryWords;
 
 @Database(entities = {HistoryWords.class}, version = 1)
 public abstract class HistoryWordsRoomDatabase extends RoomDatabase {
@@ -12,7 +14,7 @@ public abstract class HistoryWordsRoomDatabase extends RoomDatabase {
 
     private static volatile HistoryWordsRoomDatabase INSTANCE;
 
-    static HistoryWordsRoomDatabase getDatabase(final Context context) {
+    public static HistoryWordsRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (HistoryWordsRoomDatabase.class) {
                 if (INSTANCE == null) {

@@ -1,4 +1,4 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -16,6 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.marsssvolta.translator.model.HistoryWords;
+import com.marsssvolta.translator.R;
+import com.marsssvolta.translator.viewmodel.WordsViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;

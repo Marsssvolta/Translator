@@ -1,4 +1,4 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.marsssvolta.translator.model.HistoryWords;
+import com.marsssvolta.translator.R;
 
 import java.util.Collections;
 import java.util.List;

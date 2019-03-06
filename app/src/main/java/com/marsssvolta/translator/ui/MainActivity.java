@@ -1,4 +1,4 @@
-package com.marsssvolta.translator;
+package com.marsssvolta.translator.ui;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.marsssvolta.translator.R;
 
 public class MainActivity extends AppCompatActivity {
 
