@@ -1,11 +1,8 @@
 package com.marsssvolta.translator;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import java.util.Objects;
 
 import static android.support.v7.widget.OrientationHelper.VERTICAL;
 
@@ -28,7 +25,8 @@ public class HistoryFragment extends Fragment {
     private WordsViewModel mWordsViewModel;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         HistoryListAdapter historyListAdapter = new HistoryListAdapter(getContext());
@@ -37,17 +35,13 @@ public class HistoryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Подчёркивание пунктов списка
-        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), VERTICAL);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(Objects
+                .requireNonNull(getContext()), VERTICAL);
         recyclerView.addItemDecoration(itemDecor);
 
         mWordsViewModel = ViewModelProviders.of(this).get(WordsViewModel.class);
         // Установка списка
-        mWordsViewModel.getAllHistoryWords().observe(this, new Observer<List<HistoryWords>>() {
-            @Override
-            public void onChanged(@Nullable List<HistoryWords> historyWords) {
-                historyListAdapter.setHistoryWords(historyWords);
-            }
-        });
+        mWordsViewModel.getAllHistoryWords().observe(this, historyListAdapter::setHistoryWords);
 
         return view;
     }
@@ -77,15 +71,13 @@ public class HistoryFragment extends Fragment {
 
     // Диалог очистки списка
     public void deleteListDialog() {
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(Objects.requireNonNull(getContext()))
                 .setMessage(R.string.dialog_delete_all_notes)
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        mWordsViewModel.deleteAll();
-                        Snackbar.make(getActivity().findViewById(R.id.fragmentCoordinatorLayout),
-                                R.string.toast_delete_notes, Snackbar.LENGTH_LONG).show();
-                    }
+                .setPositiveButton(R.string.delete, (dialog, whichButton) -> {
+                    mWordsViewModel.deleteAll();
+                    Snackbar.make(Objects.requireNonNull(getActivity())
+                                    .findViewById(R.id.fragmentCoordinatorLayout),
+                            R.string.toast_delete_notes, Snackbar.LENGTH_LONG).show();
                 }).setNegativeButton(R.string.cancel, null).show();
     }
 }

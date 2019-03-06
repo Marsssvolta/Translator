@@ -19,18 +19,22 @@ public class WordsViewModel extends AndroidViewModel {
         mAllHistoryWords = mRepository.getAllHistoryWords();
     }
 
+    // Установка истории
     public LiveData<List<HistoryWords>> getAllHistoryWords() {
         return mAllHistoryWords;
     }
 
+    // Добавление в историю
     public void insert(HistoryWords historyWords) {
         mRepository.insert(historyWords);
     }
 
+    // Очистка истории
     public void deleteAll() {
         mRepository.deleteAll();
     }
 
+    // Перевод
     public LiveData<String> translate(String text, String langFrom, String langTo) {
         return mRepository.translate(text, langFrom, langTo);
     }

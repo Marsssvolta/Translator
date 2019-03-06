@@ -15,8 +15,4 @@ public class TranslatedText {
     public List<String> getText() {
         return text;
     }
-
-    public void setText(List<String> text) {
-        this.text = text;
-    }
 }

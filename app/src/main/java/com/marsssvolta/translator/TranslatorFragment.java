@@ -1,6 +1,5 @@
 package com.marsssvolta.translator;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,9 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 public class TranslatorFragment extends Fragment {
 
@@ -77,7 +73,7 @@ public class TranslatorFragment extends Fragment {
         mCountries = getResources().getStringArray(R.array.countries);
         Collections.addAll(categories, mCountries);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
                 android.R.layout.simple_spinner_item, categories);
 
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -113,18 +109,12 @@ public class TranslatorFragment extends Fragment {
         String language2 = String.valueOf(mSpinnerLanguageTo.getSelectedItem());
 
         mWordsViewModel.translate(text, langCode(language1), langCode(language2)).observe(
-                this, new Observer<String>() {
-                    @Override
-                    public void onChanged(@Nullable final String text) {
-                        Log.i(TAG, "onChanged: " + text);
-                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mTextTranslated.setText(text);
-                                addToHistory();
-                            }
-                        });
-                    }
+                this, text1 -> {
+                    Log.i(TAG, "onChanged: " + text1);
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                        mTextTranslated.setText(text1);
+                        addToHistory();
+                    });
                 });
     }
 
@@ -132,32 +122,21 @@ public class TranslatorFragment extends Fragment {
     public String langCode(String selectedLang) {
         String code = null;
         String[] сodes = getResources().getStringArray(R.array.codes);
-
         for (int i = 0; i < mCountries.length; i++) {
             if (selectedLang.equals(mCountries[i])) {
                 code = сodes[i];
             }
         }
-
         return code;
     }
 
     //Слушатель ввода
     public void textChangedListener() {
         RxTextView.textChanges(mTextInput).
-                filter(new Func1<CharSequence, Boolean>() {
-                    @Override
-                    public Boolean call(CharSequence charSequence) {
-                        return charSequence.length() > 0;
-                    }
-                }).
+                filter(charSequence -> charSequence.length() > 0).
                 debounce(750, TimeUnit.MILLISECONDS).
-                subscribe(new Action1<CharSequence>() {
-                    @Override
-                    public void call(CharSequence charSequence) {
-                        TranslatorFragment.this.translate(charSequence.toString().trim());
-                    }
-                });
+                subscribe(charSequence -> TranslatorFragment.this.translate(charSequence.toString()
+                        .trim()));
     }
 
     // Добавление в список

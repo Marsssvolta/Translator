@@ -4,10 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -19,18 +19,18 @@ public class WordsRepository {
     private HistoryWordsDao mHistoryWordsDao;
     private LiveData<List<HistoryWords>> mAllHistoryWords;
 
-    private static final String TAG = "WordsRepository";
-
     WordsRepository(Application application) {
         HistoryWordsRoomDatabase db = HistoryWordsRoomDatabase.getDatabase(application);
         mHistoryWordsDao = db.historyWordsDao();
         mAllHistoryWords = mHistoryWordsDao.getHistoryWords();
     }
 
+    // Установка истории
     LiveData<List<HistoryWords>> getAllHistoryWords() {
         return mAllHistoryWords;
     }
 
+    // Добавление в историю
     void insert(HistoryWords historyWords) {
         new insertAsyncTask(mHistoryWordsDao).execute(historyWords);
     }
@@ -50,6 +50,7 @@ public class WordsRepository {
         }
     }
 
+    // Очистка истории
     void deleteAll(){
         new DeleteAllAsyncTask(mHistoryWordsDao).execute();
     }
@@ -69,9 +70,10 @@ public class WordsRepository {
         }
     }
 
+    // Перевод
     public MutableLiveData<String> translate(String text, String langFrom, String langTo) {
 
-        final MutableLiveData<String> translateResponseLiveData = new MutableLiveData<String>();
+        final MutableLiveData<String> translateResponseLiveData = new MutableLiveData<>();
 
         String apiKey = "trnsl.1.1.20181017T060237Z.da104919343eec52.3" +
                 "b53694d0cf917ef528b3a939d42ec1a9af43545";
@@ -88,8 +90,8 @@ public class WordsRepository {
                         "-" + langTo);
         try {
             Response<TranslatedText> responseTranslate = call.execute();
-            translateResponseLiveData.postValue(responseTranslate.body().getText().get(0));
-            Log.i(TAG, String.valueOf(translateResponseLiveData) + "123");
+            translateResponseLiveData.postValue(Objects.requireNonNull(responseTranslate.body())
+                    .getText().get(0));
         } catch (IOException e) {
             e.printStackTrace();
         }

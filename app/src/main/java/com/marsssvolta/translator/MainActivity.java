@@ -34,11 +34,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    Fragment translatorFragment = new TranslatorFragment();
-                    return translatorFragment;
+                    return new TranslatorFragment();
                 case 1:
-                    Fragment historyFragment = new HistoryFragment();
-                    return historyFragment;
+                    return new HistoryFragment();
             }
             return null;
         }
