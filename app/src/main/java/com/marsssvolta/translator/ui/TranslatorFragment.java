@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 public class TranslatorFragment extends Fragment {
 
-    private static final String TAG = "TranslatorFragment";
-
     private Spinner mSpinnerLanguageFrom;
     private Spinner mSpinnerLanguageTo;
     private ImageView mSwapTranslate;
@@ -38,10 +35,16 @@ public class TranslatorFragment extends Fragment {
     private TextView mTextTranslated;
     private String[] mCountries;
     private WordsViewModel mWordsViewModel;
+    private String mWasTranslated;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mWasTranslated = savedInstanceState.getString("wasTranslated");
+        }
+
         mWordsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()))
                 .get(WordsViewModel.class);
     }
@@ -69,7 +72,13 @@ public class TranslatorFragment extends Fragment {
         textChangedListener();
     }
 
-    //Установка спиннеров
+    // Сохранение переведённого слова
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        savedInstanceState.putString("wasTranslated", mWasTranslated);
+    }
+
+    // Установка спиннеров
     public void setSpinners() {
         List<String> categories = new ArrayList<>();
 
@@ -87,7 +96,7 @@ public class TranslatorFragment extends Fragment {
         mSpinnerLanguageTo.setSelection(60);
     }
 
-    //Изменение направления перевода
+    // Изменение направления перевода
     public void swapButtonListener() {
         mSwapTranslate.setOnClickListener(v -> {
             int sourceLng = mSpinnerLanguageFrom.getSelectedItemPosition();
@@ -98,7 +107,7 @@ public class TranslatorFragment extends Fragment {
         });
     }
 
-    //Очистка текста
+    // Очистка текста
     public void clearButtonListener() {
         mClearText.setOnClickListener(v -> {
             mTextInput.setText("");
@@ -106,22 +115,23 @@ public class TranslatorFragment extends Fragment {
         });
     }
 
-    //Перевод текста
+    // Перевод текста
     public void translate(String text) {
-        String language1 = String.valueOf(mSpinnerLanguageFrom.getSelectedItem());
-        String language2 = String.valueOf(mSpinnerLanguageTo.getSelectedItem());
+        if (!(text).equals(mWasTranslated)) {
+            String language1 = String.valueOf(mSpinnerLanguageFrom.getSelectedItem());
+            String language2 = String.valueOf(mSpinnerLanguageTo.getSelectedItem());
 
-        mWordsViewModel.translate(text, langCode(language1), langCode(language2)).observe(
-                this, text1 -> {
-                    Log.i(TAG, "onChanged: " + text1);
-                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+            mWordsViewModel.translate(text, langCode(language1), langCode(language2))
+                    .observe(this, text1 -> Objects.requireNonNull(getActivity())
+                            .runOnUiThread(() -> {
                         mTextTranslated.setText(text1);
                         addToHistory();
-                    });
-                });
+                    }));
+        }
+        mWasTranslated = text;
     }
 
-    //Получение кода языка
+    // Получение кода языка
     public String langCode(String selectedLang) {
         String code = null;
         String[] сodes = getResources().getStringArray(R.array.codes);
@@ -133,7 +143,7 @@ public class TranslatorFragment extends Fragment {
         return code;
     }
 
-    //Слушатель ввода
+    // Слушатель ввода
     public void textChangedListener() {
         RxTextView.textChanges(mTextInput).
                 filter(charSequence -> charSequence.length() > 0).
